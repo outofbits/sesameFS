@@ -1,0 +1,17 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+*.test
+
+vendor/
+input/
+opcert/
+sesame-client/sesamefs-client
+sesamefs/sesamefs
+.sesamefs
+
+.idea/
+*.iml
