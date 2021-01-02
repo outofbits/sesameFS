@@ -24,7 +24,6 @@ var (
 	mountPoint        string
 	uid               uint32
 	gid               uint32
-	mode              uint32
 	dataDirectoryPath string
 	serverAddress     string
 	allowOther        bool
@@ -82,7 +81,6 @@ filesystem is closed down.`,
 			fsConfig := fs.FilesystemConfig{
 				UID:        uid,
 				GID:        gid,
-				Mode:       mode,
 				AllowOther: allowOther,
 			}
 			err = run(mountPoint, fsConfig, dataDirectoryPath, serverAddress)
@@ -97,14 +95,13 @@ filesystem is closed down.`,
 
 func init() {
 	runCommand.Flags().StringVar(&mountPoint, "mountpoint", "", "location on the host filesystem where this sesamefs shall be mounted")
-	_ = runCommand.MarkPersistentFlagRequired("mountpoint")
+	_ = runCommand.MarkFlagRequired("mountpoint")
 	runCommand.Flags().StringVar(&dataDirectoryPath, "data-dir", "", "optional directory on the host filesystem where to store encrypted certificates (default: in-memory vault)")
 	runCommand.Flags().StringVar(&serverAddress, "server-address", "localhost:13456", "address on which the HTTP+JSON API server shall listen for requests")
 	// optional uid, gid and file mode
 	defaultUID, defaultGID := getUserDetails()
 	runCommand.Flags().Uint32Var(&uid, "uid", defaultUID, "the user id of the certificate files in sesameFS")
 	runCommand.Flags().Uint32Var(&gid, "gid", defaultGID, "the group id  of the certificate files in sesameFS")
-	runCommand.Flags().Uint32Var(&mode, "mode", 0o440, "the file mode of the certificate files")
 	runCommand.Flags().BoolVar(&allowOther, "allow-other", false, "whether others shall be allowed to mount this filesystem")
 	// add command to root
 	rootCmd.AddCommand(runCommand)

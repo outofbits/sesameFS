@@ -5,7 +5,6 @@ import (
 	"context"
 	"github.com/outofbits/sesameFS/sesamefs/vault"
 	log "github.com/sirupsen/logrus"
-	"os"
 	"syscall"
 )
 
@@ -30,7 +29,7 @@ func (f SesameFSFile) Attr(ctx context.Context, a *fuse.Attr) error {
 	a.Inode = 2
 	a.Uid = f.config.UID
 	a.Gid = f.config.GID
-	a.Mode = os.FileMode(f.config.Mode)
+	a.Mode = 0o400
 	a.Size = fileSize
 	return nil
 }

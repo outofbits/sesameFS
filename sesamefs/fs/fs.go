@@ -16,12 +16,12 @@ type SesameFS struct {
 type FilesystemConfig struct {
 	UID        uint32
 	GID        uint32
-	Mode       uint32
 	AllowOther bool
 }
 
 func (sfs *SesameFS) Mount(mountPoint string) error {
 	fuse.ReadOnly()
+	fuse.DefaultPermissions()
 	if sfs.Config.AllowOther {
 		fuse.AllowOther()
 	}
