@@ -15,11 +15,8 @@ next throw-away key.`,
 	}
 )
 
-func init() {
-	rootCmd.Flags().StringVar(&address, "address", "localhost:13456", "address of the API endpoint of sesameFS instance")
-}
-
 // Execute executes the root command.
 func Execute() error {
+	rootCmd.PersistentFlags().StringVar(&address, "address", "localhost:13456", "address of the API endpoint of sesameFS instance")
 	return rootCmd.Execute()
 }
