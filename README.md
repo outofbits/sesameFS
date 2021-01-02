@@ -25,6 +25,20 @@ The filesystem provides an access control which would allow an one-time access t
   <br/><span>CC BY-SA 4.0, Rena Xiaxiu, K-Pop Culture Magazine</span>
 </p>
 
+## Threat Models
+
+* `cardano-node` is comprised, e.g. remote code execution 0-day. As long as the vulnerability doesn't make it possible to read out memory occupied by the running `cardano-node`, then sesameFS can protect against this threat.
+* host system of the running `cardano-node` is comprised (root or non-root access), and the attacker is eaves dropping on the sesameFS filesystem. The filesystem itself is logging each access to the three files, which is why the operator can detect conspicuous behaviour as long as the attacker is not manipulating/erasing them. Hemce, sesameFS cannot defend against attacker with root-access that are unnoticed by the operator.
+* employees directly at the cloud provider access the VPS/bare metal server and aim to read out the operational key details. In-memory storage of vault and a short life span of the throw-away key (meaning it is consumed quickly by the `cardano-node`) makes it harder for those attackers, but there is no chance of defending against them.
+
+## Conclusion
+
+This project doesn't aim to be a solid protection of the certification details, but an improvement over the common practise of keeping them on the host filesystem of VPS/bare metal server over which the operator has no physical/administrative control.
+
+A big disadvantage of sesameFS is that for each restarting of the block producer, the operator has to send a key such that `cardano-node` can read the operational key details, which is why scripts checking the health and restarting the block producer automatically would not work properly. Those scripts have to assume that those key details are on the host filesystem at any time.
+
+**Is it worth it?** I don't know :> the harm of those key details being exposed is minor compared to secret keys for pledge and node certificate.
+
 # Concept
 
 
