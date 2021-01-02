@@ -164,7 +164,7 @@ func run(mountPoint string, config fs.FilesystemConfig, dataDirectoryPath string
 	}
 	defer sesameFS.Umount(mountPoint)
 	//start the API
-	go server.Listen(serverAddress, myVault, guard, errorListener)
+	go server.Listen(serverAddress, guard, errorListener)
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)

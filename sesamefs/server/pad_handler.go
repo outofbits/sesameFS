@@ -8,14 +8,14 @@ import (
 	"net/http"
 )
 
-func handleEncryptedCertificates(vault vault.Vault, w http.ResponseWriter, req *http.Request) {
+func handleEncryptedCertificates(guard vault.Guard, w http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		data, err := ioutil.ReadAll(req.Body)
 		if err == nil {
 			var otpArray []string
 			err = json.Unmarshal(data, &otpArray)
 			if err == nil {
-				err = vault.Write(otpArray)
+				err = guard.WritePads(otpArray)
 				if err == nil {
 					w.WriteHeader(http.StatusOK)
 					w.Header().Set("Content-Type", "text/plain")

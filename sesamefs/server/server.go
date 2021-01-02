@@ -6,9 +6,9 @@ import (
 )
 
 // Listen starts a HTTP+JSON API server on the given address.
-func Listen(address string, vault vault.Vault, guard vault.Guard, errorListener chan error) {
+func Listen(address string, guard vault.Guard, errorListener chan error) {
 	http.HandleFunc("/pads", func(writer http.ResponseWriter, request *http.Request) {
-		handleEncryptedCertificates(vault, writer, request)
+		handleEncryptedCertificates(guard, writer, request)
 	})
 	http.HandleFunc("/key", func(writer http.ResponseWriter, request *http.Request) {
 		handleKeySend(guard, writer, request)

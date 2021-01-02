@@ -32,6 +32,11 @@ type Guard interface {
 	// error will be returned.
 	SetKey(keyPhrase string) error
 
+	// WritePads writes the given pad array to the vault and overrides
+	// content that might have been in the vault before. Should the write
+	// not be successful, then an error will be returned.
+	WritePads(pads []string) error
+
 	// Access aims to decrypt the info of a given InfoType of the first entry of a Vault by
 	// using the currently set key (method: SetKey). If the decryption is successful, then
 	// the JSON data of InfoType is returned. Otherwise an error will be returned.
@@ -51,6 +56,17 @@ func NewVaultGuard(myVault Vault) Guard {
 		vault: myVault,
 		lock:  &sync.Mutex{},
 	}
+}
+
+func (vg *vaultGuard) WritePads(pads []string) error {
+	vg.lock.Lock()
+	defer vg.lock.Unlock()
+	err := vg.vault.Write(pads)
+	if err != nil {
+		return err
+	}
+	vg.accessMem = nil
+	return nil
 }
 
 func (vg *vaultGuard) Access(typ InfoType) ([]byte, error) {
